@@ -4,7 +4,7 @@
     {
       "parameters": {
         "owner": "xdev272-del",
-        "repository": "claude-n8n-git",
+        "repository": "claude-n8n-github",
         "events": ["push"]
       },
       "id": "a1b2c3d4-1111-4aaa-bbbb-000000000001",
@@ -89,8 +89,7 @@
   },
   "pinData": {},
   "settings": {
-    "executionOrder": "v1",
-    "webhookUrl": "https://nikia-transpiratory-ken.ngrok-free.dev"
+    "executionOrder": "v1"
   },
   "staticData": null,
   "tags": [],
