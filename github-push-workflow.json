@@ -1,0 +1,102 @@
+{
+  "name": "GitHub Push to Main",
+  "nodes": [
+    {
+      "parameters": {
+        "owner": "xdev272-del",
+        "repository": "claude-n8n-git",
+        "events": ["push"]
+      },
+      "id": "a1b2c3d4-1111-4aaa-bbbb-000000000001",
+      "name": "GitHub Trigger",
+      "type": "n8n-nodes-base.githubTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "github-push-webhook",
+      "credentials": {
+        "githubApi": {
+          "id": "1",
+          "name": "GitHub Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-commit-message",
+              "name": "commitMessage",
+              "value": "={{ $json.head_commit.message }}",
+              "type": "string"
+            },
+            {
+              "id": "field-author-name",
+              "name": "authorName",
+              "value": "={{ $json.head_commit.author.name }}",
+              "type": "string"
+            },
+            {
+              "id": "field-repository-url",
+              "name": "repositoryUrl",
+              "value": "={{ $json.repository.html_url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-2222-4aaa-bbbb-000000000002",
+      "name": "Extract Commit Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ commitMessage: $json.commitMessage, authorName: $json.authorName, repositoryUrl: $json.repositoryUrl }) }}"
+      },
+      "id": "a1b2c3d4-3333-4aaa-bbbb-000000000003",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [750, 300]
+    }
+  ],
+  "connections": {
+    "GitHub Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract Commit Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Commit Data": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "webhookUrl": "https://nikia-transpiratory-ken.ngrok-free.dev"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "active": false
+}
